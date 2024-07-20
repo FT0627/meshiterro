@@ -27,7 +27,7 @@
               <%= link_to "ログアウト", destroy_user_session_path, method: :delete, class: 'nav-link text-dark' %>
             </li>
             <li class="nav-item">
-              <%= link_to '投稿フォーム', new_post_image_path, class: 'nav-link text-dark' %>
+              <%= link_to '投稿フォーム', new_post_image_path, class: 'nav-link text-dark', data: {turbolinks: "false"} %>
             </li>
             <li class="nav-item">
               <%= link_to 'マイページ', user_path(current_user.id), class: 'nav-link text-dark' %>
@@ -48,7 +48,7 @@
     <main class="mb-auto">
     <%= yield %>
     </main>
-   
+
     <footer class="bg-dark text-white pt-5 pb-4">
       <div class="container">
         <div class="row no-gutters">
@@ -71,5 +71,5 @@
       </div>
     </footer>
   </body>
-  <script src="http://cdn.jsdelivr.net/npm/jquery-jpostal-ja@2.14.45/jquery.jpostal.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery-jpostal-ja@2.14.45/jquery.jpostal.min.js"></script>
 </html>
