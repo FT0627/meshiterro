@@ -10,6 +10,8 @@ class PostImage < ApplicationRecord
 
   geocoded_by :address
   after_validation :geocode
+  
+  enum status: { published: 0, draft: 1, unpublished: 2 }
 
 
   def get_image
