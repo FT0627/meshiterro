@@ -20,7 +20,8 @@
           </div>
           <%= f.text_area :caption, class: "form-control", rows: "3", placeholder: "コメントここに" %>
           <% if f.object.new_record? %>
-            <%= f.submit '投稿', class: "btn btn-lg btn-block btn-info mt-4" %>
+            <%= f.submit '投稿', :name => 'post', class: "btn btn-lg btn-block btn-info mt-4" %>
+            <%= f.submit '下書きに保存', :name => 'draft', class: "btn btn-lg btn-block btn-info mt-4" %>
           <% else %>
             <%= f.submit '更新', class: "btn btn-lg btn-block btn-info mt-4" %>
           <% end %>

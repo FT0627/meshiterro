@@ -6,21 +6,21 @@ class Public::PostImagesController < ApplicationController
   def create
     @post_image = PostImage.new(post_image_params)
     @post_image.user_id = current_user.id
-    
-    if params[:draft].present?
-      @post_image.status = :draft
-    else
-      @post_image.status = :published
-    end 
-    
-    if @post_image.save
-      if @post_image.draft?
-        redirect_to post_images_path
+
+    if params[:post]
+      if @post_image.save(context: :publicize)
+        flash[:notice] = "投稿しました。"
+        redirect_to post_recipe_path(@post_image)
       else
-        redirect_to post_images_path
+        render :new
       end
     else
-      render :new
+      if @post_recipe.update(is_draft: true)
+        redirect_to user_path(current_user)
+        flash[:notice] = "下書きを保存しました。"
+      else
+        render :new
+      end
     end
   end
 
@@ -39,7 +39,7 @@ class Public::PostImagesController < ApplicationController
     @post_image = PostImage.find(params[:id])
     @post_comment = PostComment.new
   end
-  
+
   def edit
     @post_image = PostImage.find(params[:id])
     if @post_image.user_id == current_user.id
@@ -49,29 +49,37 @@ class Public::PostImagesController < ApplicationController
       render :show
     end
   end
-  
+
   def update
     @post_image = PostImage.find(params[:id])
-    if params[:draft].present?
-      @post_image.status = :draft
-      flash[:notice] = "下書きを保存しました。"
-      redirect_to post_images_path
-    elsif params[:unpublished].present?
-      @post.status = :unpublished
-      flash[:notice] = "非公開にしました。"
-      redirect_to post_images_path
+    if params[:publicize_draft]
+      @post_image.attributes = post_image_params.merge(is_draft: false)
+      if @post_image.save(context: :publicize)
+        flash[:notice] = "下書きを投稿しました。"
+        redirect_to post_image_path(@post_image)
+      else
+        @post_image.is_draft = true
+        flash.now[:alert] = "下書きの投稿に失敗しました。"
+        render :new
+      end
+    elsif params[:update_post]
+      @post_image.attributes = post_image_params
+      if @post_image.save(context: :publicize)
+        flash[:notice] = "投稿を更新しました。"
+        redirect_to post_image_path(@post_image)
+      else
+        flash.now[:alert] = "投稿の更新に失敗しました。"
+        render :new
+      end
     else
-      @post_image.status = :publish
-      flash[:notice] = "投稿を更新しました。"
-      redirect_to post_image_path(@post_image)
-    end
-    
-    if @post_image.update(post_image_params)
-      redirect_to post_image_path(@post_image)
-    else
-      render :edit
-    end 
-    
+      if @post_image.update(post_image_params)
+        flash[:notice] = "下書きを更新しました。"
+        redirect_to post_image_path(@post_image)
+      else
+        flash.now[:alert] = "下書きを更新できませんでした。"
+　　　　render :new
+　　　end
+　　end
   end
 
   def destroy
