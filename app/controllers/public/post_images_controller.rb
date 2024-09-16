@@ -10,12 +10,12 @@ class Public::PostImagesController < ApplicationController
     if params[:post]
       if @post_image.save(context: :publicize)
         flash[:notice] = "投稿しました。"
-        redirect_to post_recipe_path(@post_image)
+        redirect_to post_image_path(@post_image)
       else
         render :new
       end
     else
-      if @post_recipe.update(is_draft: true)
+      if @post_image.update(is_draft: true)
         redirect_to user_path(current_user)
         flash[:notice] = "下書きを保存しました。"
       else
@@ -27,7 +27,7 @@ class Public::PostImagesController < ApplicationController
   def index
     respond_to do |format|
       format.html do
-        @post_images = PostImage.page(params[:page])
+        @post_images = PostImage.where(is_draft: :false).page(params[:page])
       end
       format.json do
         @post_images = PostImage.all
@@ -77,9 +77,9 @@ class Public::PostImagesController < ApplicationController
         redirect_to post_image_path(@post_image)
       else
         flash.now[:alert] = "下書きを更新できませんでした。"
-　　　　render :new
-　　　end
-　　end
+        render :new
+      end
+    end
   end
 
   def destroy
@@ -90,6 +90,6 @@ class Public::PostImagesController < ApplicationController
 
   private
     def post_image_params
-      params.require(:post_image).permit(:shop_name, :image, :caption, :address)
+      params.require(:post_image).permit(:shop_name, :image, :caption, :address, :is_draft)
     end
 end

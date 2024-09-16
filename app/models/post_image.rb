@@ -10,16 +10,11 @@ class PostImage < ApplicationRecord
     validates :address
   end
 
-  validates :shop_name, presence: true
-  validates :image, presence: true
-  validates :address, presence: true
+  validates :shop_name, length: { maximum: 20 }, on: :publicize
 
   geocoded_by :address
   after_validation :geocode
   
-  enum status: { published: 0, draft: 1, unpublished: 2 }
-
-
   def get_image
     unless image.attached?
       file_path = Rails.root.join("app/assets/images/no_image.jpg")

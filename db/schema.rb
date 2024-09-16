@@ -71,6 +71,7 @@ ActiveRecord::Schema.define(version: 2024_04_04_133451) do
     t.string "shop_name"
     t.text "caption"
     t.integer "user_id"
+    t.boolean "is_draft", default: false, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "address", default: "", null: false

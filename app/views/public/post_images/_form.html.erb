@@ -1,4 +1,4 @@
-        <%= form_with model: post_image do |f| %>
+        <%= form_with model: @post_image do |f| %>
           <%= f.file_field :image, accept: "image/*", class: "w-100" %>
           <div class="input-group mb-3 mt-4">
             <div class="input-group-prepend">
@@ -23,6 +23,11 @@
             <%= f.submit '投稿', :name => 'post', class: "btn btn-lg btn-block btn-info mt-4" %>
             <%= f.submit '下書きに保存', :name => 'draft', class: "btn btn-lg btn-block btn-info mt-4" %>
           <% else %>
-            <%= f.submit '更新', class: "btn btn-lg btn-block btn-info mt-4" %>
+            <% if @post_image.is_draft == true %>
+              <%= f.submit '公開', :name => 'publicize_draft', class: "btn btn-lg btn-block btn-info mt-4" %>
+              <%= f.submit '下書きを更新', :name => 'update_draft', class: "btn btn-lg btn-block btn-info mt-4" %>
+            <% else %>
+              <%= f.submit '更新', :name => 'update_post', class: "btn btn-lg btn-block btn-info mt-4" %>
+            <% end %>
           <% end %>
         <% end %>
