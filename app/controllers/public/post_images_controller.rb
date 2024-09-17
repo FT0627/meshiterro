@@ -27,7 +27,7 @@ class Public::PostImagesController < ApplicationController
   def index
     respond_to do |format|
       format.html do
-        @post_images = PostImage.where(is_draft: :false).page(params[:page])
+        @post_images = PostImage.where(is_draft: :false).page(params[:page]).per(10)
       end
       format.json do
         @post_images = PostImage.all

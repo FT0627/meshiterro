@@ -3,7 +3,7 @@ class Public::UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
-    @post_images = @user.post_images.page(params[:page])
+    @post_images = @user.post_images.where(is_draft: :false).page(params[:page]).per(20)
   end
 
   def edit
@@ -14,6 +14,11 @@ class Public::UsersController < ApplicationController
     @user = User.find(params[:id])
     @user.update(user_params)
     redirect_to user_path(@user.id)
+  end
+
+  def confirm
+    @user = User.find(params[:id])
+    @post_images = @user.post_images.where(is_draft: :true).page(params[:page]).per(20)
   end
 
   def is_matching_login_user
