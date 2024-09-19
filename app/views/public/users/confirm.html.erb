@@ -1,7 +1,7 @@
 <div class="card-list-container py-5">
   <% @post_images.each do |post_image| %>
   <div class="card w-50 mx-auto mt-4 shadow-lg">
-    <%= link_to post_image_path(post_image.id) do %>
+    <%= link_to edit_post_image_path(post_image) do %>
       <%= image_tag post_image.get_image, class: "card-img-top", style: "object-fit: cover;" %>
     <% end %>
     <div class="card-body">
